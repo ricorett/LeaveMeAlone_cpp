@@ -7,5 +7,5 @@ AccessModifierOffset: '-4'
 SortIncludes: false
 AllowShortBlocksOnASingleLine: false
 AlignAfterOpenBracket: DontAlign
-AllowShortFunctionsOnASingleLine: inline
+AllowShortFunctionsOnASingleLine: Inline
 PointerAlignment: Left
