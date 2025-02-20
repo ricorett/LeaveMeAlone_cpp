@@ -7,6 +7,10 @@
 
 #include "Camera/CameraComponent.h"    
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/DecalComponent.h"
+#include "Components/InputComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 #include "LMADefaultCharacter.generated.h"
 
@@ -27,6 +31,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UCameraComponent* CameraComponent;
 
+	UPROPERTY()
+	UDecalComponent* CurrentCursor = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
+	UMaterialInterface* CursorMaterial = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
+	FVector CursorSize = FVector(20.0f, 40.0f, 40.0f);
+		
 	virtual void BeginPlay() override;
 
 public:	
@@ -38,8 +51,9 @@ public:
 
 private:
 	float YRotation = -75.0f;
-	float ArmLenght = 1400.0f;
+	float ArmLength = 1400.0f;
 	float FOV = 55.0f;
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+	void ZoomCamera(float Value);
 };
