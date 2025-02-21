@@ -1,17 +1,13 @@
-// LeaveMeAlone Game by Netologiya. All rights are reserved
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-
-#include "Camera/CameraComponent.h"    
+#include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/DecalComponent.h"
 #include "Components/InputComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
-
 #include "LMADefaultCharacter.generated.h"
 
 UCLASS()
@@ -20,11 +16,11 @@ class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ALMADefaultCharacter();
 
 protected:
-	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
 
@@ -39,21 +35,27 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
 	FVector CursorSize = FVector(20.0f, 40.0f, 40.0f);
-		
-	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float MinArmLength = 500.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float MaxArmLength = 2000.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float ZoomSpeed = 100.0f;
+
+public:
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
 	float YRotation = -75.0f;
 	float ArmLength = 1400.0f;
-	float FOV = 55.0f;
+
 	void MoveForward(float Value);
 	void MoveRight(float Value);
-	void ZoomCamera(float Value);
+	void ZoomIn();
+	void ZoomOut();
 };

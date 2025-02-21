@@ -1,15 +1,9 @@
-// LeaveMeAlone Game by Netologiya. All rights are reserved
-
 #include "LMADefaultCharacter.h"
 
-
-
-// Sets default values
 ALMADefaultCharacter::ALMADefaultCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->SetUsingAbsoluteRotation(true);
@@ -20,7 +14,6 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
 	CameraComponent->SetupAttachment(SpringArmComponent);
-	CameraComponent->SetFieldOfView(FOV);
 	CameraComponent->bUsePawnControlRotation = false;
 
 	bUseControllerRotationPitch = false;
@@ -28,17 +21,16 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	bUseControllerRotationRoll = false;
 }
 
-// Called when the game starts or when spawned
 void ALMADefaultCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (CursorMaterial){
+
+	if (CursorMaterial)
+	{
 		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
 	}
 }
 
-// Called every frame
 void ALMADefaultCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -59,23 +51,26 @@ void ALMADefaultCharacter::Tick(float DeltaTime)
 			CurrentCursor->SetWorldLocation(ResultHit.Location);
 		}
 	}
+
+	// Плавное изменение длины SpringArm
+	SpringArmComponent->TargetArmLength =
+		FMath::FInterpTo(SpringArmComponent->TargetArmLength, ArmLength, DeltaTime, ZoomSpeed);
 }
 
-// Called to bind functionality to input
 void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALMADefaultCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALMADefaultCharacter::MoveRight);
-	PlayerInputComponent->BindAxis("ZoomCamera", this, &ALMADefaultCharacter::ZoomCamera);
+
+	PlayerInputComponent->BindAction("ZoomIn", IE_Pressed, this, &ALMADefaultCharacter::ZoomIn);
+	PlayerInputComponent->BindAction("ZoomOut", IE_Pressed, this, &ALMADefaultCharacter::ZoomOut);
 }
 
-
-void ALMADefaultCharacter::MoveForward(float Value) {
-	
+void ALMADefaultCharacter::MoveForward(float Value)
+{
 	AddMovementInput(GetActorForwardVector(), Value);
-
 }
 
 void ALMADefaultCharacter::MoveRight(float Value)
@@ -83,9 +78,12 @@ void ALMADefaultCharacter::MoveRight(float Value)
 	AddMovementInput(GetActorRightVector(), Value);
 }
 
-void ALMADefaultCharacter::ZoomCamera(float Value){
-	float TargetLength = FMath::Clamp(SpringArmComponent->TargetArmLength - Value * 50.0f, 500.0f, 2000.0f);
-	SpringArmComponent->TargetArmLength =
-		FMath::FInterpTo(SpringArmComponent->TargetArmLength,TargetLength, GetWorld()->GetDeltaSeconds(), 5.0f);
+void ALMADefaultCharacter::ZoomIn()
+{
+	ArmLength = FMath::Clamp(ArmLength - ZoomSpeed, MinArmLength, MaxArmLength);
 }
 
+void ALMADefaultCharacter::ZoomOut()
+{
+	ArmLength = FMath::Clamp(ArmLength + ZoomSpeed, MinArmLength, MaxArmLength);
+}
