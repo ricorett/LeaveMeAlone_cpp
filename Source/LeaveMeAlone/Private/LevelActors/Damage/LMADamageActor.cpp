@@ -6,22 +6,32 @@
 // Sets default values
 ALMADamageActor::ALMADamageActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	
 	PrimaryActorTick.bCanEverTick = true;
 
-}
+	
+	SphereComponent = CreateDefaultSubobject<USphereComponent>("SphereComponent");
+	SphereComponent->SetSphereRadius(SphereRadius);
+	RootComponent = SphereComponent;
 
-// Called when the game starts or when spawned
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
+	StaticMeshComponent->SetupAttachment(RootComponent);
+
+	StaticMeshComponent->SetRelativeScale3D(FVector(2.0f, 2.0f, 0.05f));
+	StaticMeshComponent->SetRelativeLocation(FVector(0.0f, 0.0f, -4.0f));
+}
 void ALMADamageActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
+
 void ALMADamageActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	UGameplayStatics::ApplyRadialDamage(
+		GetWorld(), Damage, GetActorLocation(), SphereRadius, nullptr, {}, this, nullptr, false);
 
 }
 

@@ -8,7 +8,12 @@
 #include "Components/InputComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/LMAHealthComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 #include "LMADefaultCharacter.generated.h"
+
+//class UAnimMontage;
 
 UCLASS()
 class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
@@ -17,6 +22,10 @@ class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
 
 public:
 	ALMADefaultCharacter();
+	virtual void Tick(float DeltaTime) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UFUNCTION()
+	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; }  
 
 protected:
 	virtual void BeginPlay() override;
@@ -46,16 +55,27 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float ZoomSpeed = 100.0f;
 
-public:
-	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Health")
+	ULMAHealthComponent* HealthComponent;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* DeathMontage;
+
+	
 
 private:
 	float YRotation = -75.0f;
 	float ArmLength = 1400.0f;
+	float FOV = 55.0f;
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void ZoomIn();
 	void ZoomOut();
+	void Sprint();
+
+	void OnDeath();
+	void OnHealthChanged(float NewHealth);
+
+	void RotationPlayerOnCursor();
 };

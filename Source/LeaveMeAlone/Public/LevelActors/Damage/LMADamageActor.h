@@ -4,7 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/SphereComponent.h"      
+#include "Components/StaticMeshComponent.h"
+
 #include "LMADamageActor.generated.h"
+
 
 UCLASS()
 class LEAVEMEALONE_API ALMADamageActor : public AActor
@@ -15,9 +20,23 @@ public:
 	// Sets default values for this actor's properties
 	ALMADamageActor();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USphereComponent* SphereComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	float Damage = 5.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	float SphereRadius = 100.0f;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+
 
 public:	
 	// Called every frame
