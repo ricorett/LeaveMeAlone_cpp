@@ -60,8 +60,8 @@ void ULMAHealthComponent::OnTakeAnyDamage(
 	if (IsDead())
 		return;
 
-	Health -= Damage; 
-	/*Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);*/
+	//Health -= Damage; 
+	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
 	OnHealthChanged.Broadcast(Health);
 
 	if (IsDead())
@@ -69,3 +69,4 @@ void ULMAHealthComponent::OnTakeAnyDamage(
 		OnDeath.Broadcast();
 	}
 }
+

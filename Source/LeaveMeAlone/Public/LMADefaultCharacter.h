@@ -10,6 +10,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/LMAHealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/LMAAnimInstance.h"
 
 #include "LMADefaultCharacter.generated.h"
 
@@ -20,12 +21,16 @@ class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	
+
 public:
 	ALMADefaultCharacter();
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
 	UFUNCTION()
 	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; }  
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -61,21 +66,47 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* DeathMontage;
 
+	UAnimInstance* AnimInstance;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stamina")
+	float MaxStamina = 100.0f;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Stamina")
+	float CurrentStamina;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stamina")
+	float StaminaConsumption = 20.0f; 
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stamina")
+	float StaminaRecovery = 15.0f;
+
+	 UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float SprintSpeed = 1200.0f;
+
+	
+	
 	
 
 private:
 	float YRotation = -75.0f;
 	float ArmLength = 1400.0f;
 	float FOV = 55.0f;
+	bool bWantsToSprint = false;
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void ZoomIn();
 	void ZoomOut();
-	void Sprint();
+	
+	void StopSprint();
+	void StartSprint();
+	bool CanSprint() const;
 
 	void OnDeath();
 	void OnHealthChanged(float NewHealth);
 
 	void RotationPlayerOnCursor();
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Movement")
+	float DefaultWalkSpeed = 600.0f;
 };

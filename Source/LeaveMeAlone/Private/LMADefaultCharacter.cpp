@@ -22,6 +22,7 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	bUseControllerRotationRoll = false;
 
 	HealthComponent = CreateDefaultSubobject<ULMAHealthComponent>(TEXT("HealthComponent"));
+	
 }
 
 void ALMADefaultCharacter::BeginPlay()
@@ -36,20 +37,48 @@ void ALMADefaultCharacter::BeginPlay()
 	OnHealthChanged(HealthComponent->GetHealth());
 	HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
 	HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
+
+	DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+
+	AnimInstance = Cast<ULMAAnimInstance>(GetMesh()->GetAnimInstance());
+	CurrentStamina = MaxStamina;
 }
 
 void ALMADefaultCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Плавное изменение длины SpringArm
 	SpringArmComponent->TargetArmLength =
 		FMath::FInterpTo(SpringArmComponent->TargetArmLength, ArmLength, DeltaTime, ZoomSpeed);
-	
+
 	if (!(HealthComponent->IsDead()))
 	{
 		RotationPlayerOnCursor();
 	}
+
+	if (bWantsToSprint && GetVelocity().Size() > 0)
+	{
+		CurrentStamina = FMath::Clamp(CurrentStamina - StaminaConsumption * DeltaTime, 0.0f, MaxStamina);
+		if (CurrentStamina <= 0)
+			StopSprint();
+	}
+	else
+	{
+		CurrentStamina = FMath::Clamp(CurrentStamina + StaminaRecovery * DeltaTime, 0.0f, MaxStamina);
+	}
+
+	if (AnimInstance)
+	{
+		ULMAAnimInstance* LMAnimInstance = Cast<ULMAAnimInstance>(AnimInstance);
+		if (LMAnimInstance)
+		{
+			LMAnimInstance->StaminaPercent = CurrentStamina / MaxStamina;
+			LMAnimInstance->IsSprinting = bWantsToSprint && CurrentStamina > 0.0f;
+		}
+	}
+
+	 GEngine->AddOnScreenDebugMessage(
+		-1, 0.1f, FColor::Emerald, FString::Printf(TEXT("STAMINA: %.0f / %.0f"), CurrentStamina, MaxStamina));
 }
 
 void ALMADefaultCharacter::RotationPlayerOnCursor()
@@ -83,7 +112,8 @@ void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("ZoomIn", IE_Pressed, this, &ALMADefaultCharacter::ZoomIn);
 	PlayerInputComponent->BindAction("ZoomOut", IE_Pressed, this, &ALMADefaultCharacter::ZoomOut);
 
-	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALMADefaultCharacter::Sprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALMADefaultCharacter::StartSprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALMADefaultCharacter::StopSprint);
 }
 
 void ALMADefaultCharacter::MoveForward(float Value)
@@ -106,10 +136,7 @@ void ALMADefaultCharacter::ZoomOut()
 	ArmLength = FMath::Clamp(ArmLength + ZoomSpeed, MinArmLength, MaxArmLength);
 }
 
-void ALMADefaultCharacter::Sprint()
-{
-	//...
-}
+
 
 void ALMADefaultCharacter::OnDeath()
 {
@@ -130,4 +157,24 @@ void ALMADefaultCharacter::OnDeath()
 void ALMADefaultCharacter::OnHealthChanged(float NewHealth)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Health = %f"), NewHealth));
+}
+
+void ALMADefaultCharacter::StartSprint()
+{
+	if (CanSprint())
+	{
+		bWantsToSprint = true;
+		GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+	}
+}
+
+void ALMADefaultCharacter::StopSprint()
+{
+	bWantsToSprint = false;
+	GetCharacterMovement()->MaxWalkSpeed = DefaultWalkSpeed;
+}
+
+bool ALMADefaultCharacter::CanSprint() const
+{
+	return CurrentStamina > 10.0f && GetCharacterMovement()->IsMovingOnGround() && !GetCharacterMovement()->IsFalling();
 }
