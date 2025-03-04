@@ -1,4 +1,4 @@
-// LeaveMeAlone Game by Netologiya. All rights are reserved
+// LeaveMeAlone Game by Netologiya. All Rights Reserved.
 
 #pragma once
 
@@ -6,23 +6,52 @@
 #include "Components/ActorComponent.h"
 #include "LMAWeaponComponent.generated.h"
 
+class ALMABaseWeapon;
+class UAnimMontage;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class LEAVEMEALONE_API ULMAWeaponComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
+public:
 	ULMAWeaponComponent();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	//void StartFire();
+	//void StopFire();
+	void Fire();
+	void Reload();
 
-public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+protected:
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<ALMABaseWeapon> WeaponClass;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	UAnimMontage* ReloadMontage;
+
+	virtual void BeginPlay() override;
+
+
+private:
+	UPROPERTY()
+	ALMABaseWeapon* Weapon = nullptr;
+
+	bool AnimReloading = false;
+
+	void SpawnWeapon();
+	void InitAnimNotify();
+
+	void OnNotifyReloadFinished(USkeletalMeshComponent* SkeletalMesh);
+	bool CanReload() const;
+
+	// UFUNCTION()
+	//void OnNeedReloadHandler();
+
+	  FTimerHandle FireTimerHandle;
+	float FireRate = 0.1f; 
+	bool bIsFiring = false;
+
+	//void FireTick();
 };

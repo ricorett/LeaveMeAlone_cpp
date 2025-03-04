@@ -1,20 +1,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/Character.h"
-#include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+#include "Camera/CameraComponent.h"
+
+#include "Components/LMAHealthComponent.h"
 #include "Components/DecalComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/LMAAnimInstance.h"
+//#include "Components/LMAWeaponComponent.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Components/LMAHealthComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "Components/LMAAnimInstance.h"
+
+#include "Engine/Engine.h"
 
 #include "LMADefaultCharacter.generated.h"
 
-//class UAnimMontage;
 
 UCLASS()
 class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
@@ -66,6 +72,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* DeathMontage;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimInstance* AnimInstance;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Stamina")
@@ -83,8 +90,9 @@ protected:
 	 UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float SprintSpeed = 1200.0f;
 
-	
-	
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	ULMAWeaponComponent* WeaponComponent;
+	*/
 	
 
 private:
@@ -109,4 +117,9 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Movement")
 	float DefaultWalkSpeed = 600.0f;
+
+	void Fire();
+	//void OnStartFire();
+	//void OnStopFire();
+	void Reload();
 };
