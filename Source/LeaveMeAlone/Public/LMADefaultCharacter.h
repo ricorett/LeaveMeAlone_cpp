@@ -12,7 +12,7 @@
 #include "Components/DecalComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/LMAAnimInstance.h"
-//#include "Components/LMAWeaponComponent.h"
+#include "Components/LMAWeaponComponent.h"
 
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -90,9 +90,9 @@ protected:
 	 UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float SprintSpeed = 1200.0f;
 
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	ULMAWeaponComponent* WeaponComponent;
-	*/
+	
 	
 
 private:

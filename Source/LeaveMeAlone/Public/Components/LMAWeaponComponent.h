@@ -24,6 +24,9 @@ public:
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
+	bool GetCurrentWeaponAmmo(FAmmoWeapon& AmmoWeapon) const;
+
 protected:
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	TSubclassOf<ALMABaseWeapon> WeaponClass;

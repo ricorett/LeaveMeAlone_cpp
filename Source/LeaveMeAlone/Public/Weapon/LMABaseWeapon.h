@@ -40,9 +40,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool CanReload() const;
 
-	// UFUNCTION(BlueprintCallable)
-	//bool CanFire() const;
+	 UFUNCTION(BlueprintCallable)
+	bool CanFire() const;
 	 virtual void Tick(float DeltaTime) override;
+
+	 FAmmoWeapon GetCurrentAmmoWeapon() const { return CurrentAmmoWeapon; }
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")

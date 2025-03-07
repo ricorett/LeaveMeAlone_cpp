@@ -116,12 +116,12 @@ void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALMADefaultCharacter::StartSprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALMADefaultCharacter::StopSprint);
 
-	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALMADefaultCharacter::Fire);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALMADefaultCharacter::Fire);
 
  /*   PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALMADefaultCharacter::OnStartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ALMADefaultCharacter::OnStopFire);*/
 
-	//PlayerInputComponent->BindAction("Reload", IE_Released, this, &ALMADefaultCharacter::Reload);
+	PlayerInputComponent->BindAction("Reload", IE_Released, this, &ALMADefaultCharacter::Reload);
 	
 }
 
@@ -188,10 +188,10 @@ bool ALMADefaultCharacter::CanSprint() const
 	return CurrentStamina > 10.0f && GetCharacterMovement()->IsMovingOnGround() && !GetCharacterMovement()->IsFalling();
 }
 
-//void ALMADefaultCharacter::Fire() {
-//	if (WeaponComponent)
-//		WeaponComponent->Fire();
-//}
+void ALMADefaultCharacter::Fire() {
+	if (WeaponComponent)
+		WeaponComponent->Fire();
+}
 
 //void ALMADefaultCharacter::OnStartFire()
 //{
@@ -209,8 +209,8 @@ bool ALMADefaultCharacter::CanSprint() const
 //	}
 //}
 
-//void ALMADefaultCharacter::Reload(){
-//	if (WeaponComponent){
-//		WeaponComponent->Reload();
-//	}
-//}
+void ALMADefaultCharacter::Reload(){
+	if (WeaponComponent){
+		WeaponComponent->Reload();
+	}
+}

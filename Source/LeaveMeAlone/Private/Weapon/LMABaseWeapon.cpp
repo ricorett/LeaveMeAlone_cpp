@@ -78,15 +78,15 @@ void ALMABaseWeapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-//bool ALMABaseWeapon::CanReload() const
-//{
-//	return AmmoWeapon.Clips > 0 || AmmoWeapon.Infinite;
-//}
-//
-//bool ALMABaseWeapon::CanFire() const
-//{
-//	return CurrentAmmoWeapon.Bullets > 0 || AmmoWeapon.Infinite;
-//}
+bool ALMABaseWeapon::CanReload() const
+{
+	return AmmoWeapon.Clips > 0 || AmmoWeapon.Infinite;
+}
+
+bool ALMABaseWeapon::CanFire() const
+{
+	return CurrentAmmoWeapon.Bullets > 0 || AmmoWeapon.Infinite;
+}
 
 //void ALMABaseWeapon::Fire()
 //{
