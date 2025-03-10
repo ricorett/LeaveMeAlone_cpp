@@ -111,7 +111,7 @@ private:
 	bool CanSprint() const;
 
 	void OnDeath();
-	void OnHealthChanged(float NewHealth);
+	
 
 	void RotationPlayerOnCursor();
 

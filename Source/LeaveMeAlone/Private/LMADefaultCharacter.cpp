@@ -22,7 +22,7 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	bUseControllerRotationRoll = false;
 
 	HealthComponent = CreateDefaultSubobject<ULMAHealthComponent>("HealthComponent");
-	/*WeaponComponent = CreateDefaultSubobject<ULMAWeaponComponent>("WeaponComponent");*/
+	WeaponComponent = CreateDefaultSubobject<ULMAWeaponComponent>("WeaponComponent");
 	
 }
 
@@ -35,9 +35,9 @@ void ALMADefaultCharacter::BeginPlay()
 		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
 	}
 
-	OnHealthChanged(HealthComponent->GetHealth());
+	
 	HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
-	HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
+	
 
 	DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 
@@ -163,10 +163,10 @@ void ALMADefaultCharacter::OnDeath()
 	}
 }
 
-void ALMADefaultCharacter::OnHealthChanged(float NewHealth)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Health = %f"), NewHealth));
-}
+//void ALMADefaultCharacter::OnHealthChanged(float NewHealth)
+//{
+//	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Health = %f"), NewHealth));
+//}
 
 void ALMADefaultCharacter::StartSprint()
 {
