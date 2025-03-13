@@ -34,8 +34,8 @@ public:
 
 	void Fire();
 	void ChangeClip();
-	//UPROPERTY(BlueprintAssignable)
-	//FOnNeedReloadSignature OnNeedReload;
+	UPROPERTY(BlueprintAssignable)
+	FOnNeedReloadSignature OnNeedReload;
 
 	UFUNCTION(BlueprintCallable)
 	bool CanReload() const;

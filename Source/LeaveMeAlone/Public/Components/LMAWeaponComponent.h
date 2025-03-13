@@ -49,8 +49,8 @@ private:
 	void OnNotifyReloadFinished(USkeletalMeshComponent* SkeletalMesh);
 	bool CanReload() const;
 
-	// UFUNCTION()
-	//void OnNeedReloadHandler();
+	 UFUNCTION()
+	void OnNeedReloadHandler();
 
 	  FTimerHandle FireTimerHandle;
 	float FireRate = 0.1f; 

@@ -121,7 +121,7 @@ void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
  /*   PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALMADefaultCharacter::OnStartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ALMADefaultCharacter::OnStopFire);*/
 
-	PlayerInputComponent->BindAction("Reload", IE_Released, this, &ALMADefaultCharacter::Reload);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALMADefaultCharacter::Reload);
 	
 }
 

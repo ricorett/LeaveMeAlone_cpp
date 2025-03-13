@@ -38,7 +38,7 @@ void ULMAWeaponComponent::SpawnWeapon()
 	if (Weapon)
 	{
 		
-		/*Weapon->OnNeedReload.AddDynamic(this, &ULMAWeaponComponent::OnNeedReloadHandler);*/
+		Weapon->OnNeedReload.AddDynamic(this, &ULMAWeaponComponent::OnNeedReloadHandler);
 
 		const auto Character = Cast<ACharacter>(GetOwner());
 		if (Character)
@@ -49,10 +49,10 @@ void ULMAWeaponComponent::SpawnWeapon()
 	}
 }
 
-//void ULMAWeaponComponent::OnNeedReloadHandler()
-//{
-//	Reload();
-//}
+void ULMAWeaponComponent::OnNeedReloadHandler()
+{
+	Reload();
+}
 
 bool ULMAWeaponComponent::CanReload() const
 {
@@ -91,6 +91,7 @@ void ULMAWeaponComponent::Reload()
 {
 	if (!CanReload())
 		return;
+	Weapon->ChangeClip();
 	AnimReloading = true;
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	Character->PlayAnimMontage(ReloadMontage);

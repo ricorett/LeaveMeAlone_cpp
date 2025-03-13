@@ -47,11 +47,10 @@ void ALMABaseWeapon::Shoot()
 void ALMABaseWeapon::DecrementBullets()
 {
 	
-	/*UE_LOG(LogWeapon, Display, TEXT("Bullets = %d"), CurrentAmmoWeapon.Bullets);*/
 
 	if (IsCurrentClipEmpty())
 	{
-		/*OnNeedReload.Broadcast();*/
+		OnNeedReload.Broadcast();
 		ChangeClip();
 	}
 	CurrentAmmoWeapon.Bullets--;
