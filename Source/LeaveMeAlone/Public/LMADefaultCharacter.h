@@ -118,8 +118,8 @@ private:
 	UPROPERTY(VisibleInstanceOnly, Category = "Movement")
 	float DefaultWalkSpeed = 600.0f;
 
-	void Fire();
-	//void OnStartFire();
-	//void OnStopFire();
+	//void Fire();
+	void OnStartFire();
+	void OnStopFire();
 	void Reload();
 };

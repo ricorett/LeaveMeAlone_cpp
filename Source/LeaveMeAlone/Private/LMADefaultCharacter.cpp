@@ -116,10 +116,10 @@ void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALMADefaultCharacter::StartSprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALMADefaultCharacter::StopSprint);
 
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALMADefaultCharacter::Fire);
+	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALMADefaultCharacter::Fire);
 
- /*   PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALMADefaultCharacter::OnStartFire);
-	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ALMADefaultCharacter::OnStopFire);*/
+    PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ALMADefaultCharacter::OnStartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ALMADefaultCharacter::OnStopFire);
 
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ALMADefaultCharacter::Reload);
 	
@@ -163,10 +163,6 @@ void ALMADefaultCharacter::OnDeath()
 	}
 }
 
-//void ALMADefaultCharacter::OnHealthChanged(float NewHealth)
-//{
-//	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Health = %f"), NewHealth));
-//}
 
 void ALMADefaultCharacter::StartSprint()
 {
@@ -188,26 +184,26 @@ bool ALMADefaultCharacter::CanSprint() const
 	return CurrentStamina > 10.0f && GetCharacterMovement()->IsMovingOnGround() && !GetCharacterMovement()->IsFalling();
 }
 
-void ALMADefaultCharacter::Fire() {
+//void ALMADefaultCharacter::Fire() {
+//	if (WeaponComponent)
+//		WeaponComponent->Fire();
+//}
+
+void ALMADefaultCharacter::OnStartFire()
+{
 	if (WeaponComponent)
-		WeaponComponent->Fire();
+	{
+		WeaponComponent->StartFire();
+	}
 }
 
-//void ALMADefaultCharacter::OnStartFire()
-//{
-//	if (WeaponComponent)
-//	{
-//		WeaponComponent->StartFire();
-//	}
-//}
-//
-//void ALMADefaultCharacter::OnStopFire()
-//{
-//	if (WeaponComponent)
-//	{
-//		WeaponComponent->StopFire();
-//	}
-//}
+void ALMADefaultCharacter::OnStopFire()
+{
+	if (WeaponComponent)
+	{
+		WeaponComponent->StopFire();
+	}
+}
 
 void ALMADefaultCharacter::Reload(){
 	if (WeaponComponent){

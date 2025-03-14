@@ -17,9 +17,9 @@ class LEAVEMEALONE_API ULMAWeaponComponent : public UActorComponent
 public:
 	ULMAWeaponComponent();
 
-	//void StartFire();
-	//void StopFire();
-	void Fire();
+	void StartFire();
+	void StopFire();
+	//void Fire();
 	void Reload();
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -56,5 +56,5 @@ private:
 	float FireRate = 0.1f; 
 	bool bIsFiring = false;
 
-	//void FireTick();
+	void FireTick();
 };

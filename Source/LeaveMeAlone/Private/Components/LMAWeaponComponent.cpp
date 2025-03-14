@@ -10,13 +10,13 @@ ULMAWeaponComponent::ULMAWeaponComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-void ULMAWeaponComponent::Fire()
-{
-	if (Weapon && !AnimReloading)
-	{
-		Weapon->Fire();
-	}
-}
+//void ULMAWeaponComponent::Fire()
+//{
+//	if (Weapon && !AnimReloading)
+//	{
+//		Weapon->Fire();
+//	}
+//}
 
 void ULMAWeaponComponent::BeginPlay()
 {
@@ -97,41 +97,41 @@ void ULMAWeaponComponent::Reload()
 	Character->PlayAnimMontage(ReloadMontage);
 }
 
-//void ULMAWeaponComponent::StartFire()
-//{
-//	if (!Weapon || AnimReloading)
-//		return;
-//
-//	if (!bIsFiring)
-//	{
-//		bIsFiring = true;
-//		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &ULMAWeaponComponent::FireTick, FireRate, true);
-//	}
-//}
-//
-//void ULMAWeaponComponent::StopFire()
-//{
-//	if (bIsFiring)
-//	{
-//		bIsFiring = false;
-//		GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-//	}
-//}
-//
-//void ULMAWeaponComponent::FireTick()
-//{
-//	UE_LOG(LogTemp, Warning, TEXT("FireTick"));
-//	if (Weapon && Weapon->CanFire())
-//	{
-//		UE_LOG(LogTemp, Warning, TEXT("Firing!"));
-//		Weapon->Fire();
-//	}
-//	else
-//	{
-//		UE_LOG(LogTemp, Warning, TEXT("Can't fire!"));
-//		StopFire();
-//	}
-//}
+void ULMAWeaponComponent::StartFire()
+{
+	if (!Weapon || AnimReloading)
+		return;
+
+	if (!bIsFiring)
+	{
+		bIsFiring = true;
+		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &ULMAWeaponComponent::FireTick, FireRate, true);
+	}
+}
+
+void ULMAWeaponComponent::StopFire()
+{
+	if (bIsFiring)
+	{
+		bIsFiring = false;
+		GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+	}
+}
+
+void ULMAWeaponComponent::FireTick()
+{
+	
+	if (Weapon && Weapon->CanFire())
+	{
+		
+		Weapon->Fire();
+	}
+	else
+	{
+		
+		StopFire();
+	}
+}
 
 bool ULMAWeaponComponent::GetCurrentWeaponAmmo(FAmmoWeapon& AmmoWeapon) const
 {
